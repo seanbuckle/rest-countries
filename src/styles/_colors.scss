@@ -1,0 +1,206 @@
+@property --clr-base {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: oklch(0.4 0.4 227.802);
+}
+
+:root {
+    color-scheme: light dark;
+
+    // ─── Source ───────────────────────────────────────────────────────────────
+    --clr-base: oklch(0.4 0.4 227.802);
+
+    // ─── Primary ──────────────────────────────────────────────────────────────
+    --clr-primary: light-dark(
+        oklch(from var(--clr-base) 0.4 0.4 h),
+        oklch(from var(--clr-base) 0.8 0.4 h)
+    );
+    --clr-on-primary: light-dark(
+        oklch(from var(--clr-base) 1 0.4 h),
+        oklch(from var(--clr-base) 0.2 0.4 h)
+    );
+    --clr-primary-container: light-dark(
+        oklch(from var(--clr-base) 0.9 0.4 h),
+        oklch(from var(--clr-base) 0.3 0.4 h)
+    );
+    --clr-on-primary-container: light-dark(
+        oklch(from var(--clr-base) 0.3 0.4 h),
+        oklch(from var(--clr-base) 0.9 0.4 h)
+    );
+
+    // ─── Secondary (lower chroma, same hue) ───────────────────────────────────
+    --clr-secondary: light-dark(
+        oklch(from var(--clr-base) 0.4 0.4 calc(h + 180)),
+        oklch(from var(--clr-base) 0.8 0.4 calc(h + 180))
+    );
+    --clr-on-secondary: light-dark(
+        oklch(from var(--clr-base) 1 0.4 calc(h + 180)),
+        oklch(from var(--clr-base) 0.2 0.4 calc(h + 180))
+    );
+    --clr-secondary-container: light-dark(
+        oklch(from var(--clr-base) 0.9 0.4 calc(h + 180)),
+        oklch(from var(--clr-base) 0.3 0.4 calc(h + 180))
+    );
+    --clr-on-secondary-container: light-dark(
+        oklch(from var(--clr-base) 0.3 0.4 calc(h + 180)),
+        oklch(from var(--clr-base) 0.9 0.4 calc(h + 180))
+    );
+
+    // ─── Tertiary (hue +60 for expressive contrast) ───────────────────────────
+    --clr-tertiary: light-dark(
+        oklch(from var(--clr-base) 0.4 0.4 calc(h + 60)),
+        oklch(from var(--clr-base) 0.8 0.4 calc(h + 60))
+    );
+    --clr-on-tertiary: light-dark(
+        oklch(from var(--clr-base) 1 0.4 calc(h + 60)),
+        oklch(from var(--clr-base) 0.2 0.4 calc(h + 60))
+    );
+    --clr-tertiary-container: light-dark(
+        oklch(from var(--clr-base) 0.9 0.4 calc(h + 60)),
+        oklch(from var(--clr-base) 0.3 0.4 calc(h + 60))
+    );
+    --clr-on-tertiary-container: light-dark(
+        oklch(from var(--clr-base) 0.3 0.4 calc(h + 60)),
+        oklch(from var(--clr-base) 0.9 0.4 calc(h + 60))
+    );
+
+    // ─── Error ────────────────────────────────────────────────────────────────
+    --clr-error: light-dark(oklch(0.4 0.4 25), oklch(0.8 0.4 25));
+    --clr-on-error: light-dark(oklch(1 0.4 25), oklch(0.2 0.4 25));
+    --clr-error-container: light-dark(oklch(0.9 0.4 25), oklch(0.3 0.4 25));
+    --clr-on-error-container: light-dark(oklch(0.3 0.4 25), oklch(0.9 0.4 25));
+
+    // ─── Surface tones ────────────────────────────────────────────────────────
+    --clr-surface-dim: light-dark(
+        oklch(from var(--clr-base) 0.885 0.01 h),
+        oklch(from var(--clr-base) 0.2 0.014 h)
+    );
+    --clr-surface: light-dark(
+        oklch(from var(--clr-base) 0.98 0.024 h),
+        oklch(from var(--clr-base) 0.2 0.024 h)
+    );
+    --clr-surface-bright: light-dark(
+        oklch(from var(--clr-base) 0.985 0.006 h),
+        oklch(from var(--clr-base) 0.36 0.024 h)
+    );
+    --clr-surface-container-lowest: light-dark(
+        oklch(from var(--clr-base) 1 0.024 h),
+        oklch(from var(--clr-base) 0.16 0.024 h)
+    );
+    --clr-surface-container-low: light-dark(
+        oklch(from var(--clr-base) 0.965 0.024 h),
+        oklch(from var(--clr-base) 0.24 0.024 h)
+    );
+    --clr-surface-container: light-dark(
+        oklch(from var(--clr-base) 0.945 0.024 h),
+        oklch(from var(--clr-base) 0.27 0.024 h)
+    );
+    --clr-surface-container-high: light-dark(
+        oklch(from var(--clr-base) 0.925 0.024 h),
+        oklch(from var(--clr-base) 0.31 0.024 h)
+    );
+    --clr-surface-container-highest: light-dark(
+        oklch(from var(--clr-base) 0.905 0.024 h),
+        oklch(from var(--clr-base) 0.35 0.024 h)
+    );
+    --clr-on-surface: light-dark(
+        oklch(from var(--clr-base) 0.1 0.024 h),
+        oklch(from var(--clr-base) 0.92 0.024 h)
+    );
+    --clr-on-surface-variant: light-dark(
+        oklch(from var(--clr-base) 0.43 0.024 h),
+        oklch(from var(--clr-base) 0.84 0.024 h)
+    );
+
+    // ─── Outline ──────────────────────────────────────────────────────────────
+    --clr-outline: light-dark(
+        oklch(from var(--clr-base) 0.62 0.024 h),
+        oklch(from var(--clr-base) 0.7 0.024 h)
+    );
+    --clr-outline-variant: light-dark(
+        oklch(from var(--clr-base) 0.84 0.024 h),
+        oklch(from var(--clr-base) 0.43 0.024 h)
+    );
+
+    // ─── Inverse ──────────────────────────────────────────────────────────────
+    --clr-inverse-surface: light-dark(
+        oklch(from var(--clr-base) 0.33 0.024 h),
+        oklch(from var(--clr-base) 0.92 0.024 h)
+    );
+    --clr-inverse-on-surface: light-dark(
+        oklch(from var(--clr-base) 0.96 0.024 h),
+        oklch(from var(--clr-base) 0.33 0.024 h)
+    );
+    --clr-inverse-primary: light-dark(
+        oklch(from var(--clr-base) 0.84 0.024 h),
+        oklch(from var(--clr-base) 0.52 0.024 h)
+    );
+
+    // ─── Scrim / shadow ───────────────────────────────────────────────────────
+    --clr-scrim: oklch(0 0 0 / 0.32);
+    --clr-shadow: oklch(0 0 0 / 0.16);
+
+    // ─── Aliases ──────────────────────────────────────────────────────────────
+    --clr-text-secondary: var(--clr-on-surface-variant);
+    --clr-body: var(--clr-on-surface);
+    --clr-selection-bg: var(--clr-primary-container);
+    --clr-selection-fg: var(--clr-on-primary-container);
+
+    // ─── Motion ───────────────────────────────────────────────────────────────
+    --theme-fade-duration: 280ms;
+    --theme-fade-easing: ease-in-out;
+
+    transition: --clr-base var(--theme-fade-duration) var(--theme-fade-easing);
+    will-change: --clr-base;
+
+    // elevation material design 3 expressive shadows
+    --elevation-1:
+        0px 1px 2px 0px var(--clr-shadow), 0px 1px 3px 0px var(--clr-shadow);
+    --elevation-2:
+        0px 2px 4px -1px var(--clr-shadow), 0px 4px 5px 0px var(--clr-shadow),
+        0px 1px 10px 0px var(--clr-shadow);
+    --elevation-3:
+        0px 3px 5px -1px var(--clr-shadow), 0px 6px 10px 0px var(--clr-shadow),
+        0px 1px 18px 0px var(--clr-shadow);
+    --elevation-4:
+        0px 4px 5px -2px var(--clr-shadow), 0px 8px 10px 1px var(--clr-shadow),
+        0px 3px 14px 2px var(--clr-shadow);
+    --elevation-5:
+        0px 6px 10px -3px var(--clr-shadow),
+        0px 10px 14px 1px var(--clr-shadow), 0px 4px 18px 3px var(--clr-shadow);
+}
+
+:where(
+    html,
+    body,
+    header,
+    footer,
+    main,
+    section,
+    article,
+    nav,
+    a,
+    button,
+    input,
+    select,
+    img,
+    svg
+) {
+    transition:
+        background-color var(--theme-fade-duration) var(--theme-fade-easing),
+        color var(--theme-fade-duration) var(--theme-fade-easing),
+        border-color var(--theme-fade-duration) var(--theme-fade-easing),
+        box-shadow var(--theme-fade-duration) var(--theme-fade-easing),
+        fill var(--theme-fade-duration) var(--theme-fade-easing),
+        stroke var(--theme-fade-duration) var(--theme-fade-easing);
+}
+
+::selection {
+    background-color: var(--clr-selection-bg);
+    color: var(--clr-selection-fg);
+}
+
+::-moz-selection {
+    background-color: var(--clr-selection-bg);
+    color: var(--clr-selection-fg);
+}
