@@ -1,0 +1,56 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <p>&copy; {year} Sean Buckle. All rights reserved.</p>
+    
+    <div class="attribution">
+      <span>Built with</span>
+      <a href="https://astro.build" target="_blank" rel="noopener noreferrer">
+        <img 
+          src="https://astro.badg.es/v2/built-with-astro/tiny.svg" 
+          alt="Built with Astro" 
+          width="120" 
+          height="20" 
+          loading="lazy"
+        />
+      </a>
+    </div>
+  </div>
+</footer>
+
+<style lang="scss">
+  .site-footer {
+    padding: 2rem 1rem;
+    margin-top: auto; // Pushes footer to bottom if using flex-col layout
+    border-top: 1px solid #eee;
+    text-align: center;
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .attribution {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      
+      img {
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  // Handle Dark Mode for your REST Countries app
+  :global(.dark) .site-footer {
+    border-top-color: #333;
+    color: #ccc;
+  }
+</style>
