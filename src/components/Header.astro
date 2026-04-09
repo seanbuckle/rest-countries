@@ -1,0 +1,33 @@
+<header>
+    <h1>Where in the world?</h1>
+    <button>Toggle Theme</button>
+</header>
+
+<style>
+    header {
+        height: 4rem;
+        position: sticky;
+        top: 0;
+        inset-inline: 0;
+        z-index: 20;
+        view-transition-name: none;
+        /* backface-visibility: hidden; */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1rem;
+        background-color: var(--clr-surface-container);
+        color: var(--clr-on-surface-container);
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+</style>
