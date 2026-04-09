@@ -1,0 +1,84 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '../styles/_colors.scss';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Rest Countries</title>
+		<ClientRouter />
+	</head>
+	<body>
+		<Header transition:persist />
+		<slot />
+		<Footer/>
+	</body>
+</html>
+
+<style lang="scss">
+	*, *::before, *::after {
+		padding: 0;
+		margin: 0;
+		box-sizing: border-box;
+		appearance: none;
+	}
+	html {
+		background-color: var(--clr-surface-container);
+	}
+	html,
+	body{
+		margin: 0;
+		width: 100%;
+		min-block-size: 100svh;
+		min-block-size: 100dvh;
+	}
+	body{
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		background-color: var(--clr-surface);
+		color: var(--clr-on-surface);
+	}
+
+	::view-transition-old(root),
+	::view-transition-new(root) {
+		animation-fill-mode: both;
+	}
+
+	::view-transition-old(root) {
+		animation-name: fade-out;
+		animation-duration: 200ms;
+		animation-timing-function: ease-out;
+	}
+
+	::view-transition-new(root) {
+		animation-name: fade-in;
+		animation-duration: 280ms;
+		animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	@keyframes fade-out {
+		from {
+			opacity: 1;
+		}
+		to {
+			opacity: 0;
+		}
+	}
+</style>
