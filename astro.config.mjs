@@ -7,6 +7,15 @@ import fs from 'node:fs';
 import { browserslistToTargets } from 'lightningcss';
 import browserslist from 'browserslist';
 
+const hasLocalHttpsCerts = fs.existsSync('./localhost-key.pem') && fs.existsSync('./localhost.pem');
+
+const localHttpsConfig = hasLocalHttpsCerts
+  ? {
+    key: fs.readFileSync('./localhost-key.pem'),
+    cert: fs.readFileSync('./localhost.pem'),
+  }
+  : undefined;
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://rest-countries.seanbuckle.com',
@@ -91,12 +100,9 @@ export default defineConfig({
   },
   vite: {
     server: {
-      https: {
-        key: fs.readFileSync('./localhost-key.pem'),
-        cert: fs.readFileSync('./localhost.pem'),
-      },
+      https: localHttpsConfig,
       hmr: {
-        protocol: 'wss',
+        protocol: hasLocalHttpsCerts ? 'wss' : 'ws',
         host: 'localhost',
         clientPort: 4321,
         timeout: 0,
