@@ -1,14 +1,14 @@
 @property --clr-base {
     syntax: "<color>";
     inherits: true;
-    initial-value: oklch(0.4 0.4 227.802);
+    initial-value: oklch(0.4 0.4 258.01);
 }
 
 :root {
     color-scheme: light dark;
 
     // ─── Source ───────────────────────────────────────────────────────────────
-    --clr-base: oklch(0.4 0.4 227.802);
+    --clr-base: oklch(0.4 0.4 258.01);
 
     // ─── Primary ──────────────────────────────────────────────────────────────
     --clr-primary: light-dark(
@@ -30,38 +30,38 @@
 
     // ─── Secondary (lower chroma, same hue) ───────────────────────────────────
     --clr-secondary: light-dark(
-        oklch(from var(--clr-base) 0.4 0.4 calc(h + 180)),
-        oklch(from var(--clr-base) 0.8 0.4 calc(h + 180))
+        oklch(from var(--clr-base) 0.4 0.2 calc(h + 60)),
+        oklch(from var(--clr-base) 0.8 0.2 calc(h + 60))
     );
     --clr-on-secondary: light-dark(
-        oklch(from var(--clr-base) 1 0.4 calc(h + 180)),
-        oklch(from var(--clr-base) 0.2 0.4 calc(h + 180))
+        oklch(from var(--clr-base) 1 0.2 calc(h + 60)),
+        oklch(from var(--clr-base) 0.2 0.2 calc(h + 60))
     );
     --clr-secondary-container: light-dark(
-        oklch(from var(--clr-base) 0.9 0.4 calc(h + 180)),
-        oklch(from var(--clr-base) 0.3 0.4 calc(h + 180))
+        oklch(from var(--clr-base) 0.9 0.05 calc(h + 60)),
+        oklch(from var(--clr-base) 0.3 0.05 calc(h + 60))
     );
     --clr-on-secondary-container: light-dark(
-        oklch(from var(--clr-base) 0.3 0.4 calc(h + 180)),
-        oklch(from var(--clr-base) 0.9 0.4 calc(h + 180))
+        oklch(from var(--clr-base) 0.3 0.2 calc(h + 60)),
+        oklch(from var(--clr-base) 0.9 0.2 calc(h + 60))
     );
 
     // ─── Tertiary (hue +60 for expressive contrast) ───────────────────────────
     --clr-tertiary: light-dark(
-        oklch(from var(--clr-base) 0.4 0.4 calc(h + 60)),
-        oklch(from var(--clr-base) 0.8 0.4 calc(h + 60))
+        oklch(from var(--clr-base) 0.4 0.3 calc(h + 30)),
+        oklch(from var(--clr-base) 0.8 0.3 calc(h + 30))
     );
     --clr-on-tertiary: light-dark(
-        oklch(from var(--clr-base) 1 0.4 calc(h + 60)),
-        oklch(from var(--clr-base) 0.2 0.4 calc(h + 60))
+        oklch(from var(--clr-base) 1 0.3 calc(h + 30)),
+        oklch(from var(--clr-base) 0.2 0.3 calc(h + 30))
     );
     --clr-tertiary-container: light-dark(
-        oklch(from var(--clr-base) 0.9 0.4 calc(h + 60)),
-        oklch(from var(--clr-base) 0.3 0.4 calc(h + 60))
+        oklch(from var(--clr-base) 0.9 0.05 calc(h + 30)),
+        oklch(from var(--clr-base) 0.3 0.05 calc(h + 30))
     );
     --clr-on-tertiary-container: light-dark(
-        oklch(from var(--clr-base) 0.3 0.4 calc(h + 60)),
-        oklch(from var(--clr-base) 0.9 0.4 calc(h + 60))
+        oklch(from var(--clr-base) 0.3 0.3 calc(h + 30)),
+        oklch(from var(--clr-base) 0.9 0.3 calc(h + 30))
     );
 
     // ─── Error ────────────────────────────────────────────────────────────────
