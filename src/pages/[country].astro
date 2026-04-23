@@ -1,42 +1,48 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import countries from '../data/countries.json';
 
 export async function getStaticPaths() {
-  const response = await fetch("https://restcountries.com/v3.1/all?fields=name");
-  const countries = await response.json();
   return countries.map((c: any) => {
-    const slug = c.name.common.toLowerCase().replaceAll(' ', '-');
+    const slug = c.name.toLowerCase().replaceAll(' ', '-');
     return {
-      params: { country: slug },
-      props: { fullName: c.name.common }
+      params: { country: slug }
     };
   });
 }
 
 const { country } = Astro.params as { country: string };
 
-const countryName = country.replaceAll('-', ' ').replace(/guinea bissau/i, 'guinea-bissau').replace(/timor leste/i, 'timor-leste');
-const response = await fetch(`https://restcountries.com/v3.1/name/${countryName}?fullText=true`);
-const countryData = await response.json();
-console.log(countryData);
+const countryName = country.replaceAll('-', ' ');
+const countryData = countries.find((c: any) => c.name.toLowerCase() === countryName.toLowerCase());
 
-let borderCountries: string[] = [];
-if (countryData && countryData.length > 0 && countryData[0].borders) {
-  const codes = countryData[0].borders.join(',');
-  const borderRes = await fetch(`https://restcountries.com/v3.1/alpha?codes=${codes}&fields=name,cca3`);
-  borderCountries = await borderRes.json();
+type BorderCountry = {
+  name: string;
+  alpha3Code: string;
+  flags: {
+    svg: string;
+    alt?: string;
+  };
+  population: number;
+  region: string;
+  capital?: string | string[];
+};
+
+let borderCountries: BorderCountry[] = [];
+if (countryData?.borders?.length) {
+  const countriesByCode = new Map(countries.map((c: any) => [c.alpha3Code, c]));
+  borderCountries = countryData.borders
+    .map((code: string) => countriesByCode.get(code))
+    .filter(Boolean) as BorderCountry[];
 }
 type NativeName = {
-  common: string;
+  name: string;
 };
 
 type Country = {
-  name: {
-    common: string;
-    nativeName: {
-      [key: string]: NativeName;
-    };
-  };
+  name: string;
+  nativeName?: string;
+  alpha3Code: string;
   flags: {
     svg: string;
     alt?: string;
@@ -44,43 +50,64 @@ type Country = {
   population: number;
   region: string;
   subregion: string;
-  capital: string[];
-  tld: string[];
-  currencies: {
-    [key: string]: {
-      name: string;
-      symbol: string;
-    };
-  };
+  capital: string | string[];
+  topLevelDomain?: string[];
+  currencies?: Array<{
+    name: string;
+    symbol?: string;
+  }>;
   borders?: string[];
+  latlng: [number, number];
+};
+
+const typedCountryData = countryData as Country | undefined;
+const nativeNameCommon = typedCountryData?.nativeName ?? 'N/A';
+
+const formatCapital = (capital: string | string[] | undefined) => {
+  if (Array.isArray(capital)) return capital.join(', ');
+  return capital || 'N/A';
 };
 
 ---
 
-<Layout>
-  <main id="main">
-    {countryData && countryData.length > 0 ? (
-      <section class="card">
-        <img id="country-flag" crossorigin="anonymous" src={countryData[0].flags.svg} alt={countryData[0].flags.alt || countryData[0].name.common} />
-        <h2>{countryData[0].name.common}</h2>
-        <p><strong>Native Name:</strong> 
-        {(Object.values(countryData[0]?.name?.nativeName || {})[0] as NativeName)?.common || 'N/A'}</p>
-        <p><strong>Population:</strong> {countryData[0].population.toLocaleString()}</p>
-        <p><strong>Region:</strong> {countryData[0].region}</p>
-        <p><strong>Subregion:</strong> {countryData[0].subregion}</p>
-        <p><strong>Capital:</strong> {countryData[0].capital?.join(', ') || 'N/A'}</p>
-        <p><strong>Top Level Domain:</strong> {countryData[0].tld?.join(', ') || 'N/A'}</p>
-        <p><strong>Currencies:</strong> {(Object.values(countryData[0]?.currencies || {})[0] as { name: string; symbol: string })?.name || 'N/A'}</p>
-        <p><strong>Border countries:</strong> {borderCountries.length > 0 ? (
-    borderCountries.map((b: any) => (
-      <a href={`/${b.name.common.toLowerCase().replaceAll(' ', '-')}`}>
-        {b.name.common}
-      </a>
-    ))
-  ) : (
-    "None"
-  )}</p>
-      </section>
+<Layout title={typedCountryData ? `${typedCountryData.name}` : 'Country Not Found'}>
+  <main id="main" aria-labelledby="country-name">
+    {typedCountryData ? (
+      <>
+        <img id="country-flag" class="country-flag" crossorigin="anonymous" src={typedCountryData.flags.svg} alt={typedCountryData.flags.alt || typedCountryData.name} style={`view-transition-name: --flag-${typedCountryData.alpha3Code};`} fetchpriority="high"/>
+        <h1 id="country-name" class="heading" style={`view-transition-name: --name-${typedCountryData.alpha3Code};`}>{typedCountryData.name}</h1>
+
+        {nativeNameCommon !== typedCountryData.name && (
+          <p>{nativeNameCommon}</p>
+        )}
+        
+        <p><strong>Population:</strong> {typedCountryData.population.toLocaleString()}</p>
+        <p><strong>Region:</strong> {typedCountryData.region}</p>
+        <p><strong>Subregion:</strong> {typedCountryData.subregion}</p>
+        <p><strong>Capital:</strong> {formatCapital(typedCountryData.capital)}</p>
+        <p><strong>Top Level Domain:</strong> {typedCountryData.topLevelDomain?.join(', ') || 'N/A'}</p>
+        <p><strong>Currencies:</strong> {typedCountryData.currencies?.[0]?.name || 'N/A'}</p>
+        <section aria-labelledby="border-countries-heading">
+          <h2 id="border-countries-heading">Border countries</h2>
+          <div class="cards" role="list" aria-label="Border countries">
+          {borderCountries.length > 0 ? (
+            borderCountries.map((borderCountry: BorderCountry) => (
+            <a href={`/${borderCountry.name.toLowerCase().replace(/\s+/g, '-')}`} role="listitem" aria-label={`View details for ${borderCountry.name}`} data-astro-prefetch>
+              <section class="card">
+                {borderCountry.flags.svg && <img class="border-country-flag" src={borderCountry.flags.svg} alt={borderCountry.flags.alt || borderCountry.name} style={`view-transition-name: --flag-${borderCountry.alpha3Code};`} fetchpriority="high"/>}
+                <h2 style={`view-transition-name: --name-${borderCountry.alpha3Code};`}>{borderCountry.name}</h2>
+                <p><strong>Population:</strong> {borderCountry.population.toLocaleString()}</p>
+                <p><strong>Region:</strong> {borderCountry.region}</p>
+                <p><strong>Capital:</strong> {formatCapital(borderCountry.capital)}</p>
+              </section>
+            </a>
+          ))
+          ) : (
+            <p>No bordering countries</p>
+          )}
+          </div>
+        </section>
+      </>
     ) : (
       <p>Country not found.</p>
     )}
@@ -88,42 +115,49 @@ type Country = {
 </Layout>
 
 <style lang="scss">
-  #main {
-    padding: 2rem 5.25rem;
+  main{
+    padding-block: 1.5rem;
+    display: grid;
+    grid-template-columns: 1.5rem [image-start] 1.5rem [content-start] minmax(0, 1fr) [content-end] 1.5rem [image-end] 1.5rem;
+    .country-flag {
+      aspect-ratio: var(--ratio-ultrawide);
+      margin-block-end: 1.5rem;
+      border-radius: var(--radius-5);
+      @supports (corner-shape: squircle) {
+        border-radius: var(--radius-5);
+        corner-shape: squircle;
+      }
+      object-fit: cover;
+      grid-column: image;
+      box-shadow: var(--shadow-5);
+      @supports (animation-timeline: view()) {
+        @media (prefers-reduced-motion: no-preference) {
+          animation: hero-flag both;
+          animation-range: exit -25% exit 100%;
+          animation-timeline: view();
+        }
+      }
+    }
+    & > * {
+      grid-column: content;
+      z-index: 2;
+    }
   }
-
-  .card {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    max-width: 600px;
+  .heading{
+    font-size: clamp(2.5rem, 8vw, 4.75rem);
+    font-weight: 400;
+    line-height: 1.1;
+    text-wrap: inherit;
   }
-
-  img {
-    width: 500px;
-    aspect-ratio: 1/1;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-
-  h2 {
-    margin: 0;
-    font-size: 2rem;
-  }
-
-  p {
-    margin: 0.25rem 0;
-
-    font-size: 1.125rem;
-  }
-  a {
-    display: inline-block;
-    margin-right: 0.5rem;
-    padding: 0.25rem 0.5rem;
-    background-color: var(--clr-surface-container);
-    border-radius: 4px;
-    text-decoration: none;
-    color: inherit;
+  @keyframes hero-flag {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(.9) translateY(10vh);
+    }
   }
 </style>
 
@@ -171,4 +205,6 @@ type Country = {
     document.addEventListener('astro:page-load', scheduleApplyFlagColor);
     globalState.__countryFlagColorListenerAttached__ = true;
   }
+
+  
 </script>
