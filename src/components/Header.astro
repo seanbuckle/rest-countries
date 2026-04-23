@@ -1,33 +1,49 @@
-<header>
-    <h1>Where in the world?</h1>
-    <button>Toggle Theme</button>
+<header style="view-transition-name: --header;">
+    <a href="/" data-astro-prefetch><h1>Where in the world?</h1></a>
+    <button type="button" class="theme-toggle" aria-label="Toggle color theme">
+      <span class="theme-icon" aria-hidden="true">dark_mode</span>
+      <span>Toggle Theme</span>
+    </button>
 </header>
 
 <style>
-    header {
-        height: 4rem;
-        position: sticky;
-        top: 0;
-        inset-inline: 0;
-        z-index: 20;
-        view-transition-name: none;
-        /* backface-visibility: hidden; */
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 1rem;
-        background-color: var(--clr-surface-container);
-        color: var(--clr-on-surface-container);
+  header {
+    height: 4rem;
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    background-color: var(--clr-surface-container);
+    color: var(--clr-on-surface-container);
+    a{
+      text-decoration: none;
+      color: inherit;
     }
+    & h1 {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 1rem;
+  }
 
-    h1 {
-        font-size: 1.5rem;
-    }
-
-    button {
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-size: 1rem;
-    }
+  .theme-icon {
+    font-family: var(--font-family-icons), sans-serif;
+    font-size: 1.25rem;
+    line-height: 1;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
 </style>
