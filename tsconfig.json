@@ -6,6 +6,7 @@
         "moduleResolution": "bundler",
         "jsx": "preserve",
         "jsxImportSource": "astro",
+        "ignoreDeprecations": "6.0",
         "baseUrl": ".",
         "paths": {
             "astro:content": ["./.astro/types.d.ts"]
