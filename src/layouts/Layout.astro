@@ -1,29 +1,47 @@
 ---
-import { ClientRouter } from 'astro:transitions';
+import { Font } from "astro:assets";
 import '../styles/_colors.scss';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+
+type Props = {
+	title?: string;
+	description?: string;
+};
+
+const {title} = Astro.props as Props;
+
+const displayTitle = title ? `Countries - ${title}` : 'Countries';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en-GB">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" sizes="any" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="manifest" href="/manifest.webmanifest">
+		<meta name="theme-color" content=""  media="(prefers-color-scheme: light)"/>
+		<meta name="theme-color" content="var(--clr-surface-container)" media="(prefers-color-scheme: dark)"/>
 		<meta name="generator" content={Astro.generator} />
-		<title>Rest Countries</title>
-		<ClientRouter />
+		<meta name="description" content="A simple app to display information about countries" />
+		<title>{displayTitle}</title>
+		<Font cssVariable="--font-family" preload/>
+    <Font cssVariable="--font-family-icons" preload/>
+		<script src="/src/pwa.ts"></script>
+		
 	</head>
 	<body>
-		<Header transition:persist />
+    <a class="skip-link" href="#main">Skip to main content</a>
+		<Header />
 		<slot />
 		<Footer/>
 	</body>
 </html>
 
-<style lang="scss">
+<style lang="scss" is:global>
+  @use "open-props/style";
+  
 	*, *::before, *::after {
 		padding: 0;
 		margin: 0;
@@ -35,50 +53,137 @@ import Footer from '../components/Footer.astro';
 	}
 	html,
 	body{
-		margin: 0;
-		width: 100%;
 		min-block-size: 100svh;
 		min-block-size: 100dvh;
 	}
+  :focus-visible {
+    outline: 2px solid var(--clr-primary);
+    outline-offset: 2px;
+  }
 	body{
 		display: grid;
 		grid-template-rows: auto 1fr auto;
 		background-color: var(--clr-surface);
 		color: var(--clr-on-surface);
+		font: 300 1rem/200% var(--font-family);
 	}
+  .skip-link {
+    position: absolute;
+    inset-block-start: 0.5rem;
+    inset-inline-start: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    background: var(--clr-primary);
+    color: var(--clr-on-primary);
+    text-decoration: none;
+    transform: translateY(-200%);
+    z-index: 10000;
+  }
+  .skip-link:focus-visible {
+    transform: translateY(0);
+  }
+  .sr-only {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    display: block;
+    text-wrap: balance;
+  }
 
-	::view-transition-old(root),
-	::view-transition-new(root) {
-		animation-fill-mode: both;
-	}
+  img {
+    inline-size: min(100%, 100%);
+    block-size: auto;
+    display: block;
+  }
+  button {
+    border: 0;
+    cursor: pointer;
+  }
 
-	::view-transition-old(root) {
-		animation-name: fade-out;
-		animation-duration: 200ms;
-		animation-timing-function: ease-out;
-	}
+	.cards {
+    --col-count: 4;
+    --col-size: 16.5rem;
+    --col-gap: 1.5rem;
+    --col-size-calc: calc((100% - var(--col-gap) * var(--col-count)) / var(--col-count));
+    --col-min-size-calc: min(100%,max(var(--col-size), var(--col-size-calc)));
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--col-min-size-calc), 1fr));
+    gap: var(--col-gap);
+    > a {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+      @supports (animation-timeline: view()) {
+        @media (prefers-reduced-motion: no-preference) {
+          animation: fade-in var(--ease-in-3) both, scale-down var(--ease-in-5) reverse both;
+          animation-range: 0% 15%;
+          animation-timeline: view();
+          transform-origin: top center;
+        }
+      }
+    }
+  }
+  .card {
+    height: 100%;
+    border-radius: var(--radius-3);
+    @supports (corner-shape: squircle) {
+      border-radius: var(--radius-5);
+      corner-shape: squircle;
+    }
+    display: grid;
+    grid-template-columns: [image-start] var(--size-3) [content-start] 1fr [content-end] var(--size-3) [image-end];
+    background-color: var(--clr-surface-container-highest);
+    color: var(--clr-on-surface);
+    overflow: hidden;
+    &:has(img, h2, p){
+      padding-block-end: 1rem;
+    }
+    &:empty {
+      display: none;
+    }
+    &:hover{
+      box-shadow: var(--shadow-3);
+    }
+    &> * {
+      grid-column: content;
+    }
 
-	::view-transition-new(root) {
-		animation-name: fade-in;
-		animation-duration: 280ms;
-		animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-	}
+    img {
+      inline-size: 100%;
+      block-size: auto;
+      border-radius: var(--radius-4);
+      @supports (corner-shape: squircle) {
+        border-radius: var(--radius-5);
+        corner-shape: squircle;
+      }
+      aspect-ratio: var(--ratio-golden);
+      display: block;
+      object-fit: cover;
+      grid-column: image;
+    }
+  }
 
-	@keyframes fade-in {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+  }
+  @keyframes scale-down {
+    100% {
+      transform: scale(.75);
+    }
+  }
+  @view-transition {
+    navigation: auto;
+  }
 
-	@keyframes fade-out {
-		from {
-			opacity: 1;
-		}
-		to {
-			opacity: 0;
-		}
-	}
+
 </style>
