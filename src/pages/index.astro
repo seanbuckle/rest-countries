@@ -73,7 +73,7 @@ const sortedCountries = countries.sort((a: any, b: any) =>
       {sortedCountries.map((country: any, index: number) => (
         <a href={`/${country?.name?.toLowerCase().replace(/ /g, '-')}`} class="country-card" data-alpha3Code={country?.alpha3Code} role="listitem" aria-label={`View details for ${country?.name}`}>
           <section class="card">
-            <img src={country?.flags?.svg} alt={country?.flags?.alt} loading={index < 8 ? 'eager' : 'lazy'} style={`view-transition-name: --flag-${country.alpha3Code};`}/>
+            <img src={country?.flags?.svg} alt={country?.flags?.alt} loading={index < 8 ? 'eager' : 'lazy'} fetchpriority={index === 0 ? 'high' : 'auto'} style={`view-transition-name: --flag-${country.alpha3Code};`}/>
             <h2 style={`view-transition-name: --name-${country.alpha3Code};`}>{country?.name}</h2>
             <p><strong>Population:</strong> {country?.population?.toLocaleString()}</p>
             <p><strong>Region:</strong> {country?.region}</p>
