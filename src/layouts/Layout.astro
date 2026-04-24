@@ -35,7 +35,9 @@ const displayTitle = title ? `Countries - ${title}` : 'Countries';
 		<Header />
 		<slot />
 		<Footer/>
-    <script type="module" src="/src/pwa.ts"></script>
+    <script>
+      import '../pwa.ts';
+    </script>
 	</body>
 </html>
 
