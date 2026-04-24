@@ -52,6 +52,21 @@ export default defineConfig({
         // Keep external image caches bounded to avoid storage quota issues.
         runtimeCaching: [
           {
+            urlPattern: /^https?:\/\/[^/]+\/_astro\/.*\.(css|js|woff|woff2)$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'astro-static-assets-cache',
+              expiration: {
+                maxEntries: 300,
+                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 Year
+                purgeOnQuotaError: true,
+              },
+              cacheableResponse: {
+                statuses: [200],
+              },
+            },
+          },
+          {
             urlPattern: /^https:\/\/flagcdn\.com\/.*\.svg$/i,
             handler: 'CacheFirst',
             options: {
