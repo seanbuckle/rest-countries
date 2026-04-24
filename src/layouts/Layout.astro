@@ -28,7 +28,6 @@ const displayTitle = title ? `Countries - ${title}` : 'Countries';
 		<title>{displayTitle}</title>
 		<Font cssVariable="--font-family" preload/>
     <Font cssVariable="--font-family-icons" preload/>
-		<script src="/src/pwa.ts"></script>
 		
 	</head>
 	<body>
@@ -36,6 +35,7 @@ const displayTitle = title ? `Countries - ${title}` : 'Countries';
 		<Header />
 		<slot />
 		<Footer/>
+    <script type="module" src="/src/pwa.ts"></script>
 	</body>
 </html>
 
